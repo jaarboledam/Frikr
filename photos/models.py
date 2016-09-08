@@ -14,3 +14,6 @@ class Photo(models.Model):
     license = models.CharField(max_length=3, choices=LICENCIAS)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self): #mifoto.__str__()
+        return self.name
