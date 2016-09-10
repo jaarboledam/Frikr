@@ -8,6 +8,6 @@ def home(request):
     :param request: objeto HttpRequest
     :return: HttpResponse con la plantilla
     """
-    photos = Photo.objects.all().order_by('-created_at')  # recupera todas las fotos de la base de datos
+    photos = Photo.objects.all().order_by('-created_at')  # recupera todas las fotos de la base de datos ordenadas descendentemente (-)
     context = {'photos_list': photos[:4]}
     return render(request, 'photos/home.html', context)

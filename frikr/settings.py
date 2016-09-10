@@ -120,6 +120,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Mostrar en consola las consultas sql ejecutadas
+"""
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -136,3 +138,4 @@ LOGGING = {
         },
     }
 }
+"""
