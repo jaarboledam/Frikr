@@ -30,5 +30,5 @@ class Photo(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
     visibility = models.CharField(max_length=3, choices=VISIBILITY, default=VISIBILITY_PUBLIC)
 
-    def __str__(self): #mifoto.__str__()
+    def __str__(self):  # mifoto.__str__()
         return self.name
