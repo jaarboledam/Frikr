@@ -11,17 +11,17 @@ def login(request):
     :return: HttpResponse con la plantilla
     """
     error_message = ""
-    login_form = LoginForm()
-    if request.method == "POST":
-        username = request.POST.get('username')
-        password = request.POST.get('pwd')
+    login_form = LoginForm(request.POST) if request.method == 'POST' else LoginForm()
+    if request.method == "POST" and login_form.is_valid():
+        username = login_form.cleaned_data.get('username')
+        password = login_form.cleaned_data.get('pwd')
         user = authenticate(username=username, password=password)
         if user is None:
             error_message = "Nombre de usuario o contraseña incorrecto"
         else:
             if user.is_active:
                 django_login(request, user)
-                return redirect("/")
+                return redirect(request.GET.get('next', '/'))
             else:
                 error_message = "Cuenta de usuario inactiva"
 
