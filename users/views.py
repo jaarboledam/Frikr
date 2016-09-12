@@ -1,6 +1,8 @@
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
 from django.shortcuts import render, redirect
 
+from users.forms import LoginForm
+
 
 def login(request):
     """
@@ -9,6 +11,7 @@ def login(request):
     :return: HttpResponse con la plantilla
     """
     error_message = ""
+    login_form = LoginForm()
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('pwd')
@@ -22,7 +25,8 @@ def login(request):
             else:
                 error_message = "Cuenta de usuario inactiva"
 
-    return render(request, 'users/login.html', {'error': error_message})
+    context = {'error': error_message, 'form': login_form}
+    return render(request, 'users/login.html', context)
 
 
 def logout(request):
