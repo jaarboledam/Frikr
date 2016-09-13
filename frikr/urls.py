@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from photos.views import HomeView, PhotoDetailView, PhotoCreationView
+from photos.views import HomeView, PhotoDetailView, PhotoCreationView, PhotoListView
 from users.views import LoginView, LogoutView
 
 urlpatterns = [
@@ -26,4 +26,5 @@ urlpatterns = [
     url(r'^create$', PhotoCreationView.as_view()),
     url(r'^$', HomeView.as_view()),
     url(r'^photos/(?P<pk>\d+)$', PhotoDetailView.as_view()),  # ?P<nombre_parametro>
+    url(r'^photos$', PhotoListView.as_view()),
 ]

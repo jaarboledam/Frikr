@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.generic import ListView
 
 from photos.forms import PhotoForm
 from photos.models import Photo, VISIBILITY_PUBLIC
@@ -74,3 +75,12 @@ class PhotoCreationView(View):
 
         context = {'form': photo_form, 'message': message}
         return render(request, 'photos/photo_creation.html', context)
+
+
+class PhotoListView(ListView):
+
+    model = Photo
+    template_name = 'photos/photo_list.html'
+
+    def get(self, request):
+        return super().get(request)
