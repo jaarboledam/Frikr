@@ -1,6 +1,8 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import ListView
@@ -71,16 +73,19 @@ class PhotoCreationView(View):
         if photo_form.is_valid():
             new_photo = photo_form.save()
             photo_form = PhotoForm()
-            message = "Foto creada satisfactoriamente. <a href='photos/{0}'>Ver foto</a>".format(new_photo.pk)
+            message = "Foto creada satisfactoriamente. <a href='{0}'>Ver foto</a>".format(
+                # obtiene la url nombrada 'photos_detail'
+                reverse('photos_detail', args={new_photo.pk})
+            )
 
         context = {'form': photo_form, 'message': message}
         return render(request, 'photos/photo_creation.html', context)
 
 
-class PhotoListView(ListView):
+class PhotoListView(LoginRequiredMixin, ListView):
 
     model = Photo
     template_name = 'photos/photo_list.html'
 
-    def get(self, request):
-        return super().get(request)
+    def get_queryset(self):
+        return super().get_queryset().filter(owner=self.request.user)
