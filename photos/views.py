@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -35,6 +36,11 @@ class PhotoDetailView(View):
         :return: HttpResponse con la plantilla
         """
         possible_photos = Photo.objects.filter(pk=pk).select_related('owner')
+        if not request.user.is_authenticated():
+            possible_photos = possible_photos.filter(visibility=VISIBILITY_PUBLIC)
+        else:
+            possible_photos = possible_photos.filter(Q(visibility=VISIBILITY_PUBLIC) | Q(owner=request.user))
+
         if len(possible_photos) == 0:
             return HttpResponseNotFound("La imagen que buscas no existe")
         elif len(possible_photos) > 1:
