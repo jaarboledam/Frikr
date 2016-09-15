@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.status import HTTP_201_CREATED, HTTP_202_ACCEPTED, HTTP_204_NO_CONTENT
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
+from users.permissions import UserPermissions
 from users.serializers import UserSerializer, UserListSerializer
 
 
@@ -12,6 +13,8 @@ class UserListAPI(APIView):
     """
     Endpoint de listado de usuarios
     """
+    permission_classes = (UserPermissions,)
+
     def get(self, request):
         users = User.objects.all()
         serializer = UserListSerializer(users, many=True)
@@ -30,13 +33,17 @@ class UserDetailAPI(APIView):
     """
     Endpoint del detalle de un usuario
     """
+    permission_classes = (UserPermissions,)
+
     def get(self, request, pk):
         user = get_object_or_404(User, pk=pk)
+        self.check_object_permissions(request, user)
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
     def put(self, request, pk):
         user = get_object_or_404(User, pk=pk)
+        self.check_object_permissions(request, user)
         serializer = UserSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -46,5 +53,6 @@ class UserDetailAPI(APIView):
 
     def delete(self, request, pk):
         user = get_object_or_404(User, pk=pk)
+        self.check_object_permissions(request, user)
         user.delete()
         return Response(status=HTTP_204_NO_CONTENT)
