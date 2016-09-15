@@ -124,6 +124,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 LOGIN_URL = '/login'
 
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 5
+}
+
 # Mostrar en consola las consultas sql ejecutadas
 """
 LOGGING = {
