@@ -1,7 +1,11 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
+from rest_framework.routers import DefaultRouter
 
-from users.api import UserListAPI, UserDetailAPI
+from users.api import UserViewSet
 from users.views import LoginView, LogoutView
+
+router = DefaultRouter()
+router.register('api/1.0/users', UserViewSet, base_name="api_users_")
 
 urlpatterns = [
     # WEB URLS
@@ -9,7 +13,6 @@ urlpatterns = [
     url(r'^logout/$', LogoutView.as_view(), name='users_logout'),
 
     # API URLS
-    url(r'^api/1.0/users/$', UserListAPI.as_view(), name='api_user_list'),
-    url(r'^api/1.0/users/(?P<pk>\d+)$', UserDetailAPI.as_view(), name='api_user_detail'),
+    url(r'', include(router.urls))
 
 ]
